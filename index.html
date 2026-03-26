@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Board Game Club</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ── CONFIG: Replace these with your real values ── */
+    :root {
+      --club-name: "Board Game Club";
+      --accent:    #C0392B;  /* your brand red — change freely */
+      --accent2:   #2C3E50;  /* dark navy */
+      --light:     #FDF8F0;  /* warm cream */
+      --mid:       #F0E8D8;
+      --text:      #1A1A1A;
+      --muted:     #666;
+      --radius:    10px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--light);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--accent2);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.75rem 2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 0.75rem; }
+    .nav-logo img { height: 40px; width: 40px; object-fit: contain; border-radius: 6px; }
+    .nav-logo span { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: #fff; }
+    nav ul { list-style: none; display: flex; gap: 2rem; }
+    nav ul a { color: rgba(255,255,255,0.8); text-decoration: none; font-size: 0.9rem; font-weight: 500; letter-spacing: 0.04em; transition: color 0.2s; }
+    nav ul a:hover { color: #fff; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 88vh;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--accent2);
+      position: relative; overflow: hidden;
+      text-align: center; padding: 4rem 2rem;
+    }
+    .hero-pattern {
+      position: absolute; inset: 0; opacity: 0.05;
+      background-image: repeating-linear-gradient(45deg, #fff 0, #fff 1px, transparent 0, transparent 50%);
+      background-size: 20px 20px;
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 700px; }
+    .hero-logo { width: 110px; height: 110px; object-fit: contain; border-radius: 16px; margin-bottom: 1.5rem; border: 3px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.08); padding: 8px; }
+    .hero-content h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.8rem, 6vw, 5rem); color: #fff; line-height: 1.1; }
+    .hero-content h1 span { color: var(--accent); }
+    .hero-tagline { font-size: 1.2rem; color: rgba(255,255,255,0.7); margin: 1.25rem 0 2rem; }
+    .btn { display: inline-block; padding: 0.85rem 2.2rem; background: var(--accent); color: #fff; text-decoration: none; border-radius: var(--radius); font-weight: 600; font-size: 1rem; transition: background 0.2s, transform 0.15s; }
+    .btn:hover { background: #a93226; transform: translateY(-1px); }
+    .btn-ghost { background: transparent; border: 2px solid rgba(255,255,255,0.5); color: #fff; margin-left: 1rem; }
+    .btn-ghost:hover { background: rgba(255,255,255,0.1); }
+
+    /* ── SECTIONS ── */
+    section { padding: 5rem 2rem; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-label { font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-bottom: 0.5rem; }
+    h2 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 2.8rem); color: var(--accent2); line-height: 1.2; margin-bottom: 1.5rem; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+
+    /* ── ABOUT ── */
+    #about { background: #fff; }
+    .about-text p { color: var(--muted); margin-bottom: 1rem; font-size: 1.05rem; }
+    .stats { display: flex; gap: 2.5rem; margin-top: 2rem; }
+    .stat-num { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--accent); display: block; }
+    .stat-lbl { font-size: 0.85rem; color: var(--muted); }
+    .about-img { border-radius: 16px; width: 100%; aspect-ratio: 4/3; object-fit: cover; background: var(--mid); display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 0.9rem; }
+
+    /* ── CALENDAR ── */
+    #calendar { background: var(--light); }
+    .calendar-wrap { display: grid; grid-template-columns: auto 1fr; gap: 2.5rem; align-items: start; }
+    .mini-cal { background: #fff; border-radius: 16px; padding: 1.25rem; min-width: 280px; box-shadow: 0 2px 16px rgba(0,0,0,0.06); }
+    .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+    .cal-header button { background: none; border: none; cursor: pointer; color: var(--accent2); font-size: 1.2rem; padding: 4px 8px; border-radius: 6px; transition: background 0.15s; }
+    .cal-header button:hover { background: var(--mid); }
+    .cal-month { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; }
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
+    .cal-day-name { font-size: 0.7rem; color: var(--muted); font-weight: 600; padding: 4px 0; text-transform: uppercase; }
+    .cal-day { font-size: 0.82rem; padding: 6px 4px; border-radius: 50%; cursor: pointer; transition: background 0.15s; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; }
+    .cal-day:hover { background: var(--mid); }
+    .cal-day.other-month { color: #ccc; }
+    .cal-day.today { background: var(--accent2); color: #fff; font-weight: 600; }
+    .cal-day.has-event { position: relative; }
+    .cal-day.has-event::after { content: ''; position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%); width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
+    .cal-day.selected { background: var(--accent); color: #fff; }
+    .cal-day.selected::after { background: #fff; }
+
+    .events-panel { background: #fff; border-radius: 16px; padding: 1.5rem; min-height: 340px; box-shadow: 0 2px 16px rgba(0,0,0,0.06); }
+    .events-panel h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--accent2); margin-bottom: 1.25rem; }
+    .event-card { display: flex; gap: 1rem; padding: 0.9rem 0; border-bottom: 1px solid var(--mid); }
+    .event-card:last-child { border-bottom: none; }
+    .event-date-badge { min-width: 48px; text-align: center; background: var(--accent); color: #fff; border-radius: 8px; padding: 6px 4px; }
+    .event-date-badge .e-day { font-family: 'Playfair Display', serif; font-size: 1.4rem; line-height: 1; }
+    .event-date-badge .e-mon { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .event-info h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.2rem; }
+    .event-info p { font-size: 0.82rem; color: var(--muted); }
+    .no-events { color: var(--muted); font-size: 0.9rem; padding: 2rem 0; text-align: center; }
+    .cal-loading { color: var(--muted); font-size: 0.85rem; }
+
+    /* ── GALLERY ── */
+    #gallery { background: var(--accent2); }
+    #gallery h2 { color: #fff; }
+    #gallery .section-label { color: rgba(255,255,255,0.5); }
+    .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; margin-top: 2.5rem; }
+    .gallery-item { aspect-ratio: 4/3; border-radius: 12px; overflow: hidden; background: rgba(255,255,255,0.08); cursor: pointer; transition: transform 0.2s; }
+    .gallery-item:hover { transform: scale(1.03); }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .gallery-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.3); font-size: 0.85rem; }
+
+    /* ── MEMBERS / BoardGameGeek ── */
+    #members { background: #fff; }
+    .members-intro { color: var(--muted); max-width: 600px; margin-bottom: 2.5rem; }
+    .member-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
+    .member-card { border: 1.5px solid var(--mid); border-radius: var(--radius); padding: 1rem; text-align: center; transition: box-shadow 0.2s, transform 0.2s; }
+    .member-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); transform: translateY(-2px); }
+    .member-avatar { width: 52px; height: 52px; border-radius: 50%; background: var(--mid); margin: 0 auto 0.5rem; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem; color: var(--accent2); }
+    .member-name { font-weight: 600; font-size: 0.9rem; }
+    .member-link { font-size: 0.78rem; color: var(--accent); text-decoration: none; }
+    .member-link:hover { text-decoration: underline; }
+
+    /* ── JOIN ── */
+    #join { background: var(--accent); text-align: center; padding: 5rem 2rem; }
+    #join h2 { color: #fff; }
+    #join p { color: rgba(255,255,255,0.8); margin: 1rem auto 2rem; max-width: 500px; }
+    .btn-white { background: #fff; color: var(--accent); font-weight: 700; }
+    .btn-white:hover { background: #f5e6e6; }
+
+    /* ── FOOTER ── */
+    footer { background: var(--accent2); color: rgba(255,255,255,0.6); text-align: center; padding: 1.5rem 2rem; font-size: 0.85rem; }
+    footer a { color: rgba(255,255,255,0.8); text-decoration: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .two-col, .calendar-wrap { grid-template-columns: 1fr; }
+      .mini-cal { min-width: unset; }
+      nav ul { gap: 1rem; }
+      .stats { flex-wrap: wrap; gap: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <!-- Replace src with your logo path, e.g. src="images/logo.png" -->
+    <img src="images/logo.png" alt="Club logo" onerror="this.style.display='none'" />
+    <span>Board Game Club</span>
+  </div>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#calendar">Events</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#members">Members</a></li>
+    <li><a href="#join">Join</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-pattern"></div>
+  <div class="hero-content">
+    <!-- Replace src with your logo path -->
+    <img class="hero-logo" src="images/logo.png" alt="Club logo" onerror="this.style.display='none'" />
+    <h1>Roll Dice,<br /><span>Make Friends</span></h1>
+    <p class="hero-tagline">Your friendly neighbourhood board gaming club — meet, play, repeat.</p>
+    <a href="#calendar" class="btn">See upcoming events</a>
+    <a href="#join" class="btn btn-ghost">Join us</a>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container two-col">
+    <div class="about-text">
+      <p class="section-label">Who we are</p>
+      <h2>Strategy, luck & good company</h2>
+      <!-- Edit this paragraph -->
+      <p>We are a welcoming group of board game enthusiasts who gather regularly to play everything from quick card games to epic strategy epics. All skill levels welcome — we'll teach you!</p>
+      <p>Whether you're a hardcore gamer or just curious about the hobby, our sessions are relaxed, friendly, and always fun.</p>
+      <div class="stats">
+        <div><span class="stat-num">30+</span><span class="stat-lbl">Members</span></div>
+        <div><span class="stat-num">2×</span><span class="stat-lbl">Monthly sessions</span></div>
+        <div><span class="stat-num">200+</span><span class="stat-lbl">Games available</span></div>
+      </div>
+    </div>
+    <!-- Replace src with a real photo, e.g. src="images/about.jpg" -->
+    <div class="about-img" id="about-img-wrap">
+      <img src="images/about.jpg" alt="Game night" style="width:100%;height:100%;object-fit:cover;border-radius:16px;" onerror="document.getElementById('about-img-wrap').innerHTML='<div style=\'width:100%;aspect-ratio:4/3;border-radius:16px;background:var(--mid);display:flex;align-items:center;justify-content:center;color:var(--muted)\'>Replace with a photo →</div>'" />
+    </div>
+  </div>
+</section>
+
+<!-- CALENDAR -->
+<section id="calendar">
+  <div class="container">
+    <p class="section-label">What's on</p>
+    <h2>Upcoming events</h2>
+    <div class="calendar-wrap">
+      <!-- Mini calendar -->
+      <div class="mini-cal">
+        <div class="cal-header">
+          <button id="prev-month">&#8592;</button>
+          <span class="cal-month" id="cal-month-label"></span>
+          <button id="next-month">&#8594;</button>
+        </div>
+        <div class="cal-grid" id="cal-grid"></div>
+      </div>
+      <!-- Event list -->
+      <div class="events-panel">
+        <h3 id="events-heading">All upcoming events</h3>
+        <div id="events-list"><p class="cal-loading">Loading events…</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="container">
+    <p class="section-label">Game nights</p>
+    <h2>Photos from the table</h2>
+    <div class="gallery-grid" id="gallery-grid">
+      <!-- Add <img> tags here, or populate via JS. Placeholders shown: -->
+      <div class="gallery-item"><div class="gallery-placeholder">images/gallery1.jpg</div></div>
+      <div class="gallery-item"><div class="gallery-placeholder">images/gallery2.jpg</div></div>
+      <div class="gallery-item"><div class="gallery-placeholder">images/gallery3.jpg</div></div>
+      <div class="gallery-item"><div class="gallery-placeholder">images/gallery4.jpg</div></div>
+      <div class="gallery-item"><div class="gallery-placeholder">images/gallery5.jpg</div></div>
+      <div class="gallery-item"><div class="gallery-placeholder">images/gallery6.jpg</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- MEMBERS (BoardGameGeek collections) -->
+<section id="members">
+  <div class="container">
+    <p class="section-label">Our people</p>
+    <h2>Meet the club</h2>
+    <p class="members-intro">Browse our members' BoardGameGeek collections — find out what we own and what we love to play.</p>
+    <div class="member-grid" id="member-grid">
+      <!-- EDIT THIS LIST — add one block per member -->
+      <!-- Format: { name, initials, bgg } where bgg is their BGG username -->
+    </div>
+  </div>
+</section>
+
+<!-- JOIN -->
+<section id="join">
+  <div class="container">
+    <h2>Ready to play?</h2>
+    <p>Sessions are open to everyone. Come along, bring a friend, and roll some dice with us.</p>
+    <!-- Replace href with your contact/signup link -->
+    <a href="mailto:club@example.com" class="btn btn-white">Get in touch</a>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; <span id="year"></span> Board Game Club &nbsp;·&nbsp; <a href="https://boardgamegeek.com">BoardGameGeek</a></p>
+</footer>
+
+<script>
+  /* ════════════════════════════════════════
+     CONFIG — edit these values
+  ════════════════════════════════════════ */
+  const CONFIG = {
+    clubName:   "Board Game Club",
+    tagline:    "Roll Dice, Make Friends",
+    contactEmail: "club@example.com",
+
+    /* Google Calendar — see README below */
+    googleCalendarId:  "YOUR_CALENDAR_ID@group.calendar.google.com",
+    googleApiKey:      "YOUR_GOOGLE_API_KEY",
+
+    /* Members: add/remove entries here */
+    members: [
+      { name: "Alice",   initials: "AL", bgg: "alice_bgg" },
+      { name: "Bob",     initials: "BO", bgg: "bob_plays" },
+      { name: "Claire",  initials: "CL", bgg: "claire_g"  },
+      { name: "David",   initials: "DV", bgg: "dave_dice"  },
+    ],
+
+    /* Gallery images — list filenames inside /images/ */
+    galleryImages: [
+      /* "game-night-1.jpg", "game-night-2.jpg", ... */
+    ],
+  };
+
+  /* ════════════════════════════════════════
+     YEAR
+  ════════════════════════════════════════ */
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  /* ════════════════════════════════════════
+     MEMBERS
+  ════════════════════════════════════════ */
+  const memberGrid = document.getElementById("member-grid");
+  CONFIG.members.forEach(m => {
+    memberGrid.innerHTML += `
+      <div class="member-card">
+        <div class="member-avatar">${m.initials}</div>
+        <div class="member-name">${m.name}</div>
+        <a class="member-link" href="https://boardgamegeek.com/collection/user/${m.bgg}" target="_blank" rel="noopener">
+          BGG collection ↗
+        </a>
+      </div>`;
+  });
+
+  /* ════════════════════════════════════════
+     GALLERY (from CONFIG or existing HTML)
+  ════════════════════════════════════════ */
+  if (CONFIG.galleryImages.length > 0) {
+    const gg = document.getElementById("gallery-grid");
+    gg.innerHTML = "";
+    CONFIG.galleryImages.forEach(img => {
+      gg.innerHTML += `<div class="gallery-item"><img src="images/${img}" alt="Game night" /></div>`;
+    });
+  }
+
+  /* ════════════════════════════════════════
+     CALENDAR
+  ════════════════════════════════════════ */
+  const DAYS   = ["Mo","Tu","We","Th","Fr","Sa","Su"];
+  const MONTHS = ["January","February","March","April","May","June",
+                  "July","August","September","October","November","December"];
+
+  let calYear  = new Date().getFullYear();
+  let calMonth = new Date().getMonth();
+  let allEvents = [];
+  let selectedDate = null;
+
+  /* Fetch events from Google Calendar */
+  async function fetchEvents() {
+    const id = CONFIG.googleCalendarId;
+    const key = CONFIG.googleApiKey;
+
+    if (id.includes("YOUR_") || key.includes("YOUR_")) {
+      /* Demo mode — show placeholder events */
+      const y = new Date().getFullYear();
+      const m = String(new Date().getMonth() + 1).padStart(2,"0");
+      allEvents = [
+        { title: "Game Night — Strategy",  date: `${y}-${m}-08`, time: "19:00", location: "Community Hall" },
+        { title: "Game Night — Party",     date: `${y}-${m}-22`, time: "19:00", location: "Community Hall" },
+        { title: "Wargame Sunday",         date: `${y}-${m}-15`, time: "14:00", location: "The Library" },
+      ];
+      renderCalendar();
+      renderEvents(null);
+      return;
+    }
+
+    const now = new Date().toISOString();
+    const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(id)}/events`
+      + `?key=${key}&timeMin=${now}&maxResults=50&singleEvents=true&orderBy=startTime`;
+
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      allEvents = (data.items || []).map(e => ({
+        title:    e.summary || "(no title)",
+        date:     (e.start.dateTime || e.start.date).slice(0, 10),
+        time:     e.start.dateTime ? new Date(e.start.dateTime).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}) : "All day",
+        location: e.location || "",
+      }));
+    } catch(err) {
+      allEvents = [];
+      document.getElementById("events-list").innerHTML = `<p class="no-events">Could not load events. Check your API key.</p>`;
+    }
+    renderCalendar();
+    renderEvents(null);
+  }
+
+  /* Render the mini calendar grid */
+  function renderCalendar() {
+    document.getElementById("cal-month-label").textContent = `${MONTHS[calMonth]} ${calYear}`;
+    const grid = document.getElementById("cal-grid");
+    grid.innerHTML = DAYS.map(d => `<div class="cal-day-name">${d}</div>`).join("");
+
+    const first = new Date(calYear, calMonth, 1);
+    /* Monday-based week: getDay() returns 0=Sun → shift */
+    let startDow = (first.getDay() + 6) % 7;
+    const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+    const daysInPrev  = new Date(calYear, calMonth, 0).getDate();
+    const today = new Date();
+
+    const eventDates = new Set(allEvents.map(e => e.date));
+
+    /* Prev month padding */
+    for (let i = startDow - 1; i >= 0; i--) {
+      grid.innerHTML += `<div class="cal-day other-month">${daysInPrev - i}</div>`;
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const dateStr = `${calYear}-${String(calMonth+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+      const isToday = today.getFullYear()===calYear && today.getMonth()===calMonth && today.getDate()===d;
+      const hasEv   = eventDates.has(dateStr);
+      const isSel   = selectedDate === dateStr;
+      const cls = [
+        "cal-day",
+        isToday ? "today" : "",
+        hasEv   ? "has-event" : "",
+        isSel   ? "selected" : "",
+      ].filter(Boolean).join(" ");
+      grid.innerHTML += `<div class="${cls}" data-date="${dateStr}">${d}</div>`;
+    }
+
+    /* Next month padding to fill row */
+    const total = startDow + daysInMonth;
+    const remainder = total % 7 === 0 ? 0 : 7 - (total % 7);
+    for (let d = 1; d <= remainder; d++) {
+      grid.innerHTML += `<div class="cal-day other-month">${d}</div>`;
+    }
+
+    /* Click handlers */
+    grid.querySelectorAll(".cal-day[data-date]").forEach(el => {
+      el.addEventListener("click", () => {
+        selectedDate = el.dataset.date;
+        renderCalendar();
+        renderEvents(selectedDate);
+      });
+    });
+  }
+
+  /* Render event list */
+  function renderEvents(filterDate) {
+    const list = document.getElementById("events-list");
+    const heading = document.getElementById("events-heading");
+
+    let events = filterDate
+      ? allEvents.filter(e => e.date === filterDate)
+      : allEvents.filter(e => e.date >= new Date().toISOString().slice(0,10));
+
+    heading.textContent = filterDate
+      ? `Events on ${new Date(filterDate + "T12:00:00").toLocaleDateString(undefined, {weekday:"long",month:"long",day:"numeric"})}`
+      : "All upcoming events";
+
+    if (events.length === 0) {
+      list.innerHTML = `<p class="no-events">No events ${filterDate ? "on this day" : "scheduled"}.</p>`;
+      return;
+    }
+
+    list.innerHTML = events.map(e => {
+      const dt = new Date(e.date + "T12:00:00");
+      const day = dt.getDate();
+      const mon = dt.toLocaleString("default", {month:"short"}).toUpperCase();
+      return `
+        <div class="event-card">
+          <div class="event-date-badge"><div class="e-day">${day}</div><div class="e-mon">${mon}</div></div>
+          <div class="event-info">
+            <h4>${e.title}</h4>
+            <p>${e.time}${e.location ? " · " + e.location : ""}</p>
+          </div>
+        </div>`;
+    }).join("");
+  }
+
+  /* Month navigation */
+  document.getElementById("prev-month").addEventListener("click", () => {
+    calMonth--; if (calMonth < 0) { calMonth = 11; calYear--; }
+    selectedDate = null;
+    renderCalendar(); renderEvents(null);
+  });
+  document.getElementById("next-month").addEventListener("click", () => {
+    calMonth++; if (calMonth > 11) { calMonth = 0; calYear++; }
+    selectedDate = null;
+    renderCalendar(); renderEvents(null);
+  });
+
+  /* Boot */
+  fetchEvents();
+</script>
+</body>
+</html>
