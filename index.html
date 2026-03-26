@@ -210,12 +210,7 @@
       <a href="https://maps.google.com/?q=150+Rue+du+4+Août+1789,+69100+Villeurbanne" target="_blank" rel="noopener" class="btn" style="margin-top:1.75rem;display:inline-block;">Voir sur Google Maps</a>
     </div>
     <div class="map-wrap">
-      <iframe
-        src="https://maps.google.com/maps?q=150+Rue+du+4+Aout+1789,+69100+Villeurbanne,+France&output=embed&z=15"
-        width="100%" height="100%" style="border:0;border-radius:16px;min-height:340px;"
-        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-        title="Carte — Café Associatif de la MIETE">
-      </iframe>
+      <img src="plan.jpeg" alt="Plan d'accès — Café Associatif de la MIETE" style="width:100%;height:100%;object-fit:cover;display:block;" />
     </div>
   </div>
 </section>
@@ -308,9 +303,34 @@
       { name: "David",   initials: "DV", bgg: "dave_dice"  },
     ],
 
-    /* Gallery images — list filenames inside /images/ */
+    /* Gallery images — fichiers dans /gallery/ */
     galleryImages: [
-      /* "game-night-1.jpg", "game-night-2.jpg", ... */
+      "632037957_1327698469394340_5921796372485056426_n.jpg",
+      "632206418_1327698722727648_431473140609431739_n.jpg",
+      "634154229_1327698532727667_6589199013696093658_n.jpg",
+      "649276879_1349451640552356_6987261628544468318_n.jpg",
+      "649375275_1349451297219057_4914856752818930296_n.jpg",
+      "649746566_1349449830552537_9075099928128940491_n.jpg",
+      "649821537_1349451217219065_7410456984904930901_n.jpg",
+      "649834444_1349449890552531_2980769937935289923_n.jpg",
+      "649834444_1349449997219187_5272214188016859502_n.jpg",
+      "649937620_1349450323885821_1549121356766072785_n.jpg",
+      "650200119_1349454477218739_4698974106442482469_n.jpg",
+      "650203214_1349454253885428_3918969257038162143_n.jpg",
+      "650223233_1349448317219355_2367974308891497953_n.jpg",
+      "650235487_1349452780552242_7656836828873012541_n.jpg",
+      "650247858_1349452150552305_3013064138022738355_n.jpg",
+      "650261958_1349451760552344_4111201748963187766_n.jpg",
+      "650302810_1349451443885709_4424744230866669590_n.jpg",
+      "650332677_1349449527219234_800445224995060126_n.jpg",
+      "650333616_1349449783885875_2264500118787219238_n.jpg",
+      "650488259_1349452460552274_9206553513413751024_n.jpg",
+      "650737074_1349449053885948_2283202386921343024_n.jpg",
+      "650846986_1349452300552290_4876967287233687071_n.jpg",
+      "651174730_1349452013885652_3645490772121909000_n.jpg",
+      "651203022_1349453117218875_8656987204303494550_n.jpg",
+      "651204921_1349452880552232_9036152361050286610_n.jpg",
+      "651209587_1349448633885990_4148103969898843973_n.jpg",
     ],
   };
 
@@ -340,8 +360,11 @@
   if (CONFIG.galleryImages.length > 0) {
     const gg = document.getElementById("gallery-grid");
     gg.innerHTML = "";
-    CONFIG.galleryImages.forEach(img => {
-      gg.innerHTML += `<div class="gallery-item"><img src="images/${img}" alt="Game night" /></div>`;
+    const picked = [...CONFIG.galleryImages]
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 5);
+    picked.forEach(img => {
+      gg.innerHTML += `<div class="gallery-item"><img src="gallery/${img}" alt="Soirée jeux" loading="lazy" /></div>`;
     });
   }
 
