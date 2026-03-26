@@ -126,16 +126,38 @@
     .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .gallery-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.3); font-size: 0.85rem; }
 
-    /* ── MEMBERS / BoardGameGeek ── */
+    /* ── LIGHTBOX ── */
+    #lightbox { display: none; position: fixed; inset: 0; z-index: 999; background: rgba(0,0,0,0.88); align-items: center; justify-content: center; cursor: zoom-out; }
+    #lightbox.open { display: flex; }
+    #lightbox img { max-width: 92vw; max-height: 92vh; border-radius: 10px; box-shadow: 0 8px 48px rgba(0,0,0,0.6); object-fit: contain; cursor: default; }
+    #lightbox-close { position: fixed; top: 1.25rem; right: 1.5rem; color: #fff; font-size: 2rem; line-height: 1; cursor: pointer; opacity: 0.7; transition: opacity 0.2s; }
+    #lightbox-close:hover { opacity: 1; }
+
+    /* ── NOS JEUX ── */
     #members { background: #fff; }
-    .members-intro { color: var(--muted); max-width: 600px; margin-bottom: 2.5rem; }
-    .member-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
-    .member-card { border: 1.5px solid var(--mid); border-radius: var(--radius); padding: 1rem; text-align: center; transition: box-shadow 0.2s, transform 0.2s; }
-    .member-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); transform: translateY(-2px); }
-    .member-avatar { width: 52px; height: 52px; border-radius: 50%; background: var(--mid); margin: 0 auto 0.5rem; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem; color: var(--accent2); }
-    .member-name { font-weight: 600; font-size: 0.9rem; }
-    .member-link { font-size: 0.78rem; color: var(--accent); text-decoration: none; }
-    .member-link:hover { text-decoration: underline; }
+    .games-intro { color: var(--muted); max-width: 620px; margin-bottom: 2.5rem; font-size: 1.05rem; }
+    .club-ludo-card { display: flex; align-items: center; gap: 1.5rem; background: var(--accent2); color: #fff; border-radius: 16px; padding: 1.5rem 2rem; margin-bottom: 2.5rem; text-decoration: none; transition: opacity 0.2s, transform 0.15s; }
+    .club-ludo-card:hover { opacity: 0.92; transform: translateY(-2px); }
+    .club-ludo-icon { font-size: 2.5rem; flex-shrink: 0; }
+    .club-ludo-card h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; margin-bottom: 0.2rem; }
+    .club-ludo-card p { font-size: 0.9rem; opacity: 0.8; margin: 0; }
+    .ludo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; }
+    .ludo-card { border: 1.5px solid var(--mid); border-radius: var(--radius); padding: 1.1rem; text-align: center; transition: box-shadow 0.2s, transform 0.2s; }
+    .ludo-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); transform: translateY(-2px); }
+    .ludo-avatar { width: 52px; height: 52px; border-radius: 50%; background: var(--mid); margin: 0 auto 0.6rem; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem; color: var(--accent2); }
+    .ludo-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.3rem; }
+    .ludo-link { font-size: 0.8rem; color: var(--accent); text-decoration: none; }
+    .ludo-link:hover { text-decoration: underline; }
+
+    /* ── TARIFS ── */
+    #tarifs { background: var(--light); }
+    .tarifs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
+    .tarif-card { background: #fff; border-radius: 16px; padding: 2rem; box-shadow: 0 2px 16px rgba(0,0,0,0.06); display: flex; flex-direction: column; align-items: flex-start; }
+    .tarif-price { font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--accent); line-height: 1; margin-bottom: 0.25rem; }
+    .tarif-price sup { font-size: 1.4rem; vertical-align: super; }
+    .tarif-title { font-weight: 700; font-size: 1.1rem; color: var(--accent2); margin-bottom: 0.75rem; }
+    .tarif-desc { color: var(--muted); font-size: 0.95rem; line-height: 1.6; }
+    .tarif-badge { display: inline-block; margin-top: 1rem; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; background: var(--mid); color: var(--accent2); border-radius: 20px; padding: 0.3rem 0.85rem; }
 
     /* ── JOIN ── */
     #join { background: var(--accent); text-align: center; padding: 5rem 2rem; }
@@ -169,7 +191,8 @@
     <li><a href="#about">Lieu</a></li>
     <li><a href="#calendar">Agenda</a></li>
     <li><a href="#gallery">Galerie</a></li>
-    <li><a href="#members">Membres</a></li>
+    <li><a href="#members">Nos jeux</a></li>
+    <li><a href="#tarifs">Tarifs</a></li>
     <li><a href="#join">Rejoindre</a></li>
   </ul>
 </nav>
@@ -256,15 +279,49 @@
   </div>
 </section>
 
-<!-- MEMBERS (BoardGameGeek collections) -->
+<!-- NOS JEUX -->
 <section id="members">
   <div class="container">
-    <p class="section-label">Notre communauté</p>
-    <h2>Rencontrez le club</h2>
-    <p class="members-intro">Parcourez les collections BoardGameGeek de nos membres — découvrez ce qu'on possède et ce qu'on adore jouer.</p>
-    <div class="member-grid" id="member-grid">
-      <!-- EDIT THIS LIST — add one block per member -->
-      <!-- Format: { name, initials, bgg } where bgg is their BGG username -->
+    <p class="section-label">Nos jeux</p>
+    <h2>Ludothèque du club</h2>
+    <p class="games-intro">Retrouvez la collection du club et les bibliothèques de jeux de nos membres sur MyLudo.</p>
+
+    <!-- Profil du club -->
+    <a href="https://www.myludo.fr/#!/profil/ambiances-jeux-32388/collection" target="_blank" rel="noopener" class="club-ludo-card">
+      <span class="club-ludo-icon">🎲</span>
+      <div>
+        <h3>Ambiances &amp; Jeux</h3>
+        <p>Voir tous les jeux du club sur MyLudo ↗</p>
+      </div>
+    </a>
+
+    <!-- Profils des membres -->
+    <div class="ludo-grid" id="ludo-grid"></div>
+  </div>
+</section>
+
+<!-- TARIFS -->
+<section id="tarifs">
+  <div class="container">
+    <p class="section-label">Tarifs</p>
+    <h2>Venez à votre rythme</h2>
+    <div class="tarifs-grid">
+
+      <div class="tarif-card">
+        <div class="tarif-price"><sup>€</sup>2</div>
+        <div class="tarif-title">À la séance</div>
+        <p class="tarif-desc">Participation libre par soirée. Aucun engagement — venez quand vous voulez, aussi souvent que vous le souhaitez.</p>
+        <span class="tarif-badge">Sans inscription</span>
+      </div>
+
+      <div class="tarif-card">
+        <div class="tarif-price"><sup>€</sup>15</div>
+        <div class="tarif-title">Adhésion annuelle</div>
+        <p class="tarif-desc">Rejoignez l'association pour une année entière. L'adhésion couvre la saison de septembre à août et donne accès à toutes les soirées.</p>
+        <span class="tarif-badge">Septembre → Août</span>
+        <a href="https://www.helloasso.com/associations/ambiances-et-jeux/adhesions/bulletin-d-adhesion-2025-2026" target="_blank" rel="noopener" class="btn" style="margin-top:1.25rem;">S'inscrire sur HelloAsso ↗</a>
+      </div>
+
     </div>
   </div>
 </section>
@@ -274,12 +331,12 @@
   <div class="container">
     <h2>Prêt à jouer ?</h2>
     <p>Nos séances sont ouvertes à tous. Venez, amenez un ami, et lancez les dés avec nous.</p>
-    <a href="mailto:club@example.com" class="btn btn-white">Nous contacter</a>
+    <a href="https://www.helloasso.com/associations/ambiances-et-jeux/adhesions/bulletin-d-adhesion-2025-2026" target="_blank" rel="noopener" class="btn btn-white">Adhérer sur HelloAsso</a>
   </div>
 </section>
 
 <footer>
-  <p>&copy; <span id="year"></span> Ambiances &amp; Jeux &nbsp;·&nbsp; <a href="https://boardgamegeek.com">BoardGameGeek</a></p>
+  <p>&copy; <span id="year"></span> Ambiances &amp; Jeux &nbsp;·&nbsp; <a href="https://www.myludo.fr" target="_blank" rel="noopener">MyLudo</a></p>
 </footer>
 
 <script>
@@ -295,12 +352,14 @@
     googleCalendarId: "6dc81b79c97badbf8c35c8a1e3dda3cd600ddf1e5e7867584f1df194360fbf39@group.calendar.google.com",
     googleApiKey:     "AIzaSyCLQ7tLWZwgxCQxIZiVjoyqSoLdgNKiRoM",
 
-    /* Members: add/remove entries here */
+    /* Profil MyLudo du club — remplacez https://www.myludo.fr/#!/profil/ambiances-jeux-32388/collection dans le HTML également */
+    clubLudo: "https://www.myludo.fr/#!/profil/ambiances-jeux-32388/collection",
+
+    /* Membres — ajoutez/retirez des entrées ici */
     members: [
-      { name: "Alice",   initials: "AL", bgg: "alice_bgg" },
-      { name: "Bob",     initials: "BO", bgg: "bob_plays" },
-      { name: "Claire",  initials: "CL", bgg: "claire_g"  },
-      { name: "David",   initials: "DV", bgg: "dave_dice"  },
+      { name: "Alexis",  initials: "AL", ludo: "https://www.myludo.fr/#!/profil/alexis-oizel-61780/collection"  },
+      { name: "David",   initials: "DA", ludo: "https://www.myludo.fr/#!/profil/david-robert-31399/collection"  },
+      { name: "Vincent", initials: "VI", ludo: "https://www.myludo.fr/#!/profil/kaahdoh-11924/collection"       },
     ],
 
     /* Gallery images — fichiers dans /gallery/ */
@@ -340,16 +399,16 @@
   document.getElementById("year").textContent = new Date().getFullYear();
 
   /* ════════════════════════════════════════
-     MEMBERS
+     NOS JEUX — membres MyLudo
   ════════════════════════════════════════ */
-  const memberGrid = document.getElementById("member-grid");
+  const ludoGrid = document.getElementById("ludo-grid");
   CONFIG.members.forEach(m => {
-    memberGrid.innerHTML += `
-      <div class="member-card">
-        <div class="member-avatar">${m.initials}</div>
-        <div class="member-name">${m.name}</div>
-        <a class="member-link" href="https://boardgamegeek.com/collection/user/${m.bgg}" target="_blank" rel="noopener">
-          Collection BGG ↗
+    ludoGrid.innerHTML += `
+      <div class="ludo-card">
+        <div class="ludo-avatar">${m.initials}</div>
+        <div class="ludo-name">${m.name}</div>
+        <a class="ludo-link" href="${m.ludo}" target="_blank" rel="noopener">
+          Voir sa collection ↗
         </a>
       </div>`;
   });
@@ -362,7 +421,7 @@
     gg.innerHTML = "";
     const picked = [...CONFIG.galleryImages]
       .sort(() => Math.random() - 0.5)
-      .slice(0, 5);
+      .slice(0, 8);
     picked.forEach(img => {
       gg.innerHTML += `<div class="gallery-item"><img src="gallery/${img}" alt="Soirée jeux" loading="lazy" /></div>`;
     });
@@ -518,6 +577,29 @@
 
   /* Boot */
   fetchEvents();
+
+  /* ════════════════════════════════════════
+     LIGHTBOX
+  ════════════════════════════════════════ */
+  const lightbox     = document.getElementById("lightbox");
+  const lightboxImg  = document.getElementById("lightbox-img");
+
+  document.getElementById("gallery-grid").addEventListener("click", e => {
+    const img = e.target.closest(".gallery-item img");
+    if (!img) return;
+    lightboxImg.src = img.src;
+    lightbox.classList.add("open");
+  });
+
+  document.getElementById("lightbox-close").addEventListener("click", () => lightbox.classList.remove("open"));
+  lightbox.addEventListener("click", e => { if (e.target === lightbox) lightbox.classList.remove("open"); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") lightbox.classList.remove("open"); });
 </script>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Image agrandie">
+  <span id="lightbox-close" aria-label="Fermer">&times;</span>
+  <img id="lightbox-img" src="" alt="Photo agrandie" />
+</div>
 </body>
 </html>
