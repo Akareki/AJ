@@ -378,7 +378,7 @@
 
     const now = new Date().toISOString();
     const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(id)}/events`
-      + `?key=${key}&timeMin=${now}&maxResults=50&singleEvents=true&orderBy=startTime`;
+      + `?key=${key}&timeMin=${now}&maxResults=4&singleEvents=true&orderBy=startTime`;
 
     try {
       const res = await fetch(url);
